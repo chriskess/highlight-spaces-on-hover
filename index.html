@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="utf-8" />
+  <title>fpe hello world demo</title>
+  <script src="https://code.archilogic.com/fpe-sdk/v3.1.x/fpe.js"></script>
+  <style>
+    #hello-plan {
+      height: 100%;
+    }
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <body>
+    <div id="hello-plan"></div>
+    <script type="module">
+      const startupOptions = {
+        theme: {
+          elements: {
+            roomStamp: {
+              roomStampDisplay: ["area", "customId", "name", "usage"],
+            },
+          },
+        },
+      };
+      // Create publishable access token at https://developers.archilogic.com/access-tokens.html
+      const publishableToken = "73852421-4688-4373-b39c-74bf1652faa7";
+      const startupSettings = {};
+      const demoSceneId = "6344cefd-8ec6-49f1-b6a1-5c6fb868494b";
+      const container = document.getElementById("hello-plan");
+      const floorPlan = new FloorPlanEngine(container, startupSettings);
+      function randomizeColors() {
+        return Math.floor(Math.random() * 255);
+      }
+      floorPlan.loadScene(demoSceneId, { publishableToken }).then(() => {
+        //const spaces = floorPlan.resources.spaces;
+        //const assets = floorPlan.resources.assets;
+        console.log(assets);
+      });
+      floorPlan.on("mousemove", handleMouseMove);
+      let listOfHighlightedSpaces = [];
+      function handleMouseMove(evt) {
+        const { pos, sourceEvent, nodeId } = evt;
+        const { assets, spaces } = floorPlan.getResourcesFromPosition(pos);
+        console.log(spaces);
+        if (
+          !listOfHighlightedSpaces.length ||
+          listOfHighlightedSpaces[0].id !== spaces[0].node.id
+        ) {
+          listOfHighlightedSpaces.forEach((node) => node.setHighlight());
+          spaces[0].node.setHighlight({
+            fill: [randomizeColors(), randomizeColors(), randomizeColors()],
+            outline: [200, 42, 25],
+            outlineWidth: 2,
+          });
+          listOfHighlightedSpaces = [spaces[0].node];
+        }
+      }
+    </script>
+  </body>
+</html>
