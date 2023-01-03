@@ -36,9 +36,9 @@
         return Math.floor(Math.random() * 255);
       }
       floorPlan.loadScene(demoSceneId, { publishableToken }).then(() => {
-        //const spaces = floorPlan.resources.spaces;
+        const spaces = floorPlan.resources.spaces;
         //const assets = floorPlan.resources.assets;
-        console.log(assets);
+        console.log(spaces);
       });
       floorPlan.on("mousemove", handleMouseMove);
       let listOfHighlightedSpaces = [];
